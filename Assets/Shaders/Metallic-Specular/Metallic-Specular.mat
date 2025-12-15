@@ -131,7 +131,7 @@ Material:
     - _IndirectSpecular: 1
     - _IndirectSpecularSmoothness: 1
     - _MainMaskType: 0
-    - _Metallic: 0
+    - _Metallic: 1
     - _MetallicStrength: 0
     - _NormalStrength: 1
     - _OcclusionStrength: 1
@@ -147,7 +147,7 @@ Material:
     - _ShadowFalloff: 1
     - _ShadowOffset: -0.05
     - _ShadowStrength: 0.1
-    - _Smoothness: 0.7
+    - _Smoothness: 0.753
     - _SmoothnessStrength: 0.851
     - _SmoothnessTextureChannel: 0
     - _Specular: 1
