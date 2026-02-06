@@ -14,7 +14,6 @@ Material:
   m_ValidKeywords:
   - N_F_EAL_ON
   - N_F_MC_ON
-  - N_F_O_ON
   - N_F_RDC_ON
   - N_F_RELGI_ON
   - N_F_SS_ON
@@ -51,7 +50,8 @@ Material:
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - SRPDEFAULTUNLIT
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -70,9 +70,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Culling: 2
     - _MCapIntensity: 0.562
     - _MixMainTexToOutline: 1
     - _N_F_MC: 1
+    - _N_F_O: 0
     - _NoisyOutlineIntensity: 0
     m_Colors: []
   m_BuildTextureStacks: []
