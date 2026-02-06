@@ -1,0 +1,24 @@
+#pragma kernel CSMain
+
+Texture2D<float3> TextureFrom;
+Texture2D<float3> TextureTo;
+RWTexture2D<float3> ResultTexture;
+
+float _BlendFactor;
+
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    ResultTexture[id.xy] = lerp(TextureFrom[id.xy], TextureTo[id.xy], _BlendFactor);
+}
+
+//#pragma kernel CSMain
+
+//RWTexture2D<float4> ResultTexture;
+//float _BlendFactor;
+
+//[numthreads(256, 1, 1)]
+//void CSMain(uint3 id : SV_DispatchThreadID)
+//{
+//    ResultTexture[id.xy] = _BlendFactor;
+//}

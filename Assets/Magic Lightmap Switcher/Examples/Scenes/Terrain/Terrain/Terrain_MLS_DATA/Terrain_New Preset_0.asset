@@ -1,0 +1,189 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d30d7fc3fce64943af982260b857a69, type: 3}
+  m_Name: Terrain_New Preset_0
+  m_EditorClassIdentifier: 
+  sceneGUID: -187186
+  dataPrefix: Terrain
+  dataName: New Preset_0
+  blendingIndex: 0
+  blendingRange: {x: 0, y: 1}
+  startValue: 0
+  sceneLightingData:
+    lightmapName: New Preset_0
+    rendererDatas:
+    - rendererShaderProperties: []
+      currentMaterial: {fileID: 0}
+      objectId: 7ba6e4cc-60ad-4ee6-a597-7f99f4d18451
+      lightmapIndex: 0
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      position: {x: 61.79, y: 20.16, z: 48.04}
+      lightmapScaleOffset: {x: 0.42187485, y: 0.42187485, z: 0.4296875, w: 0}
+      bakeryVolumeID: {fileID: 0}
+    - rendererShaderProperties: []
+      currentMaterial: {fileID: 0}
+      objectId: 21266d44-0ac5-43bb-aaf3-34b728ca11e3
+      lightmapIndex: 0
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      position: {x: 59.88, y: 20.18, z: 37.23}
+      lightmapScaleOffset: {x: 0, y: 0, z: 0, w: 0}
+      bakeryVolumeID: {fileID: 0}
+    - rendererShaderProperties: []
+      currentMaterial: {fileID: 0}
+      objectId: 5a2333f5-cd9f-4917-9127-924e0d15aee1
+      lightmapIndex: 0
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      position: {x: 58.57, y: 18.62, z: 44.87}
+      lightmapScaleOffset: {x: 0.42187485, y: 0.42187485, z: 0, w: 0.28365687}
+      bakeryVolumeID: {fileID: 0}
+    - rendererShaderProperties: []
+      currentMaterial: {fileID: 0}
+      objectId: 5f5e7de3-7bc9-45fe-8876-2753f1c4ea14
+      lightmapIndex: 0
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      position: {x: 54.1, y: 18.62, z: 42.77}
+      lightmapScaleOffset: {x: 0.42187485, y: 0.42187485, z: 0, w: 0.56731373}
+      bakeryVolumeID: {fileID: 0}
+    - rendererShaderProperties: []
+      currentMaterial: {fileID: 0}
+      objectId: 6e58a26b-0663-412b-83bd-8644358d573b
+      lightmapIndex: 0
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      position: {x: 55.56, y: 19.9, z: 48.63}
+      lightmapScaleOffset: {x: 0.42187485, y: 0.42187485, z: 0, w: 0}
+      bakeryVolumeID: {fileID: 0}
+    terrainDatas:
+    - objectId: 66ff6482-0926-4dcb-94cc-015576f5636d
+      lightmapIndex: 0
+      lightmapOffsetScale: {x: 0.09765625, y: 0.09765625, z: 0.859375, w: 0}
+    lightSourceDatas:
+    - name: Directional Light
+      instanceID: 46522
+      lightUID: 63c7803c-1d7b-4827-a72f-4c0a3cb87320
+      position: {x: 0, y: 3, z: 0}
+      rotation: {x: 0.25000006, y: -0.24999997, z: 0.066987306, w: 0.9330127}
+      intensity: 1
+      color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+      temperature: 6570
+      range: 10
+      spotAngle: 30
+      shadowType: 2
+      shadowStrength: 1
+      areaSize: {x: 1, y: 1}
+      enableTime: 0
+      disableTime: 0
+      lightCookie: {fileID: 0}
+      isMainLight: 0
+    customBlendableDatas: []
+    lightmapsLight:
+    - {fileID: 2800000, guid: 21c53a74ce5d02842a02bf2de1eed22f, type: 3}
+    lightmapsDirectional:
+    - {fileID: 2800000, guid: 078370df58f364e4eaec2ef3ae8ac017, type: 3}
+    lightmapsShadowmask:
+    - {fileID: 0}
+    skyboxSettings:
+      skyboxShaderProperties:
+      - trackable: 0
+        name: _SunDisk
+        type: 2
+        floatValue: 1
+        colorValue: {r: 0, g: 0, b: 0, a: 0}
+        textureValue: {fileID: 0}
+        min: 0
+        max: 0
+      - trackable: 0
+        name: _SunSize
+        type: 3
+        floatValue: 0.04
+        colorValue: {r: 0, g: 0, b: 0, a: 0}
+        textureValue: {fileID: 0}
+        min: 0
+        max: 1
+      - trackable: 0
+        name: _SunSizeConvergence
+        type: 3
+        floatValue: 5
+        colorValue: {r: 0, g: 0, b: 0, a: 0}
+        textureValue: {fileID: 0}
+        min: 1
+        max: 10
+      - trackable: 0
+        name: _AtmosphereThickness
+        type: 3
+        floatValue: 1
+        colorValue: {r: 0, g: 0, b: 0, a: 0}
+        textureValue: {fileID: 0}
+        min: 0
+        max: 5
+      - trackable: 0
+        name: _SkyTint
+        type: 0
+        floatValue: 0
+        colorValue: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+        textureValue: {fileID: 0}
+        min: 0
+        max: 0
+      - trackable: 0
+        name: _GroundColor
+        type: 0
+        floatValue: 0
+        colorValue: {r: 0.36899927, g: 0.3489993, b: 0.34099925, a: 1}
+        textureValue: {fileID: 0}
+        min: 0
+        max: 0
+      - trackable: 0
+        name: _Exposure
+        type: 3
+        floatValue: 1.3
+        colorValue: {r: 0, g: 0, b: 0, a: 0}
+        textureValue: {fileID: 0}
+        min: 0
+        max: 8
+      enabled: 0
+      tintColor: {r: 0, g: 0, b: 0, a: 0}
+      skyboxTexture: {fileID: 0}
+      exposure: 0
+    lightmapsBakeryRNM0: []
+    lightmapsBakeryRNM1: []
+    lightmapsBakeryRNM2: []
+    bakeryVolumes:
+      name: []
+      volumeTexture0: []
+      volumeTexture1: []
+      volumeTexture2: []
+      volumeTexture3: []
+      volumeTexture4: []
+    reflectionProbes:
+      name:
+      - MLS_Reflection Probe::0
+      cubeReflectionTexture:
+      - {fileID: 8900000, guid: 1a01049cc3894634f9e4af9d96c55d23, type: 3}
+    skyboxReflectionTexture:
+    - {fileID: 8900000, guid: e5d9c927d7521204e90a0694f06b41f3, type: 3}
+    lightProbes: []
+    lightProbes1D: []
+    initialLightProbesArrayPosition: 0
+    fogSettings:
+      enabled: 0
+      fogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+      fogDensity: 0.01
+    environmentSettings:
+      source: 0
+      sunSource: {fileID: 0}
+      ambientColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+      skyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+      equatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
+      groundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+      intensityMultiplier: 1
+  workflow: 1
+  prevBlendIndex: 0
+  removed: 0
