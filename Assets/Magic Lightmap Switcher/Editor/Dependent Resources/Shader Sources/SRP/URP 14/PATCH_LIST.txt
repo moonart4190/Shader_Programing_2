@@ -1,0 +1,14 @@
+com.unity.render-pipelines.universal@version/Shaders/Lit.shader
+com.unity.render-pipelines.universal@version/Shaders/SimpleLit.shader
+com.unity.render-pipelines.universal@version/Shaders/LitForwardPass.hlsl
+com.unity.render-pipelines.universal@version/Shaders/LitGBufferPass.hlsl
+com.unity.render-pipelines.universal@version/Shaders/SimpleLitForwardPass.hlsl
+com.unity.render-pipelines.universal@version/Shaders/SimpleLitGBufferPass.hlsl
+com.unity.render-pipelines.universal@version/Shaders/Terrain/TerrainLit.shader
+com.unity.render-pipelines.universal@version/ShaderLibrary/GlobalIllumination.hlsl
+com.unity.render-pipelines.universal@version/ShaderLibrary/Lighting.hlsl
+com.unity.render-pipelines.universal@version/ShaderLibrary/Input.hlsl
+com.unity.render-pipelines.universal@version/ShaderLibrary/LightCookie/LightCookieInput.hlsl
+com.unity.render-pipelines.universal@version/ShaderLibrary/Debug/Debugging3D.hlsl
+com.unity.render-pipelines.core@version/ShaderLibrary/EntityLighting.hlsl
+com.unity.render-pipelines.core@version/ShaderLibrary/Common.hlsl

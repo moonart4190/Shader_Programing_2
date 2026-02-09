@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: SystemProperties
   m_EditorClassIdentifier: 
   standardRPActive: 0
-  universalRPActive: 0
+  universalRPActive: 1
   highDefinitionRPActive: 0
   standardRPPatched: 0
-  universalRPPatched: 0
+  universalRPPatched: 1
   highDefinitionRPPatched: 0
   clearOriginalLightingData: 0
   batchByLightmapIndex: 0
-  editorRestarted: 0
+  editorRestarted: 1
   prevTimeSinceStartup: 0
   checkForPatchedRoutineInProcess: 0
   restoring: 0
@@ -36,21 +36,24 @@ MonoBehaviour:
   VFXGraphDirTo: 
   HDRPConfigDirFrom: 
   HDRPConfigDirTo: 
-  srpVersion: 
+  srpVersion: 14.0.12
   srpReady: 0
   storePath: /MLS_DATA
   deferredWarningConfirmed: 0
   useSwitchingOnly: 0
   ignoreCameraError: 0
   showShaderInitWarning: 1
-  srp_PathRoot: 
-  srp_ModifiedSourcesPathRoot: 
-  srp_Core_SourcesPath: 
-  srp_CORE_ModifySourcesPath: 
+  srp_PathRoot: C:/Unity Project/Shader-Programming-Test/Assets/../Packages/
+  srp_ModifiedSourcesPathRoot: C:/Unity Project/Shader-Programming-Test/Assets\Magic
+    Lightmap Switcher/Editor/Dependent Resources/Shader Sources/SRP/URP 14
+  srp_Core_SourcesPath: C:/Unity Project/Shader-Programming-Test/Assets/../Packages/com.unity.render-pipelines.core@14.0.12/ShaderLibrary/
+  srp_CORE_ModifySourcesPath: C:/Unity Project/Shader-Programming-Test/Assets\Magic
+    Lightmap Switcher/Editor/Dependent Resources/Shader Sources/SRP/URP 14/Core/
   SRP__ENTITY_LIGHTING__DEFAULT_SOURCE_FILE: EntityLighting.hlsl
   SRP__COMMON__DEFAULT_SOURCE_FILE: Common.hlsl
-  srp_URP_SourcesPath: 
-  srp_URP_COMMON_ModifySourcesPath: 
+  srp_URP_SourcesPath: C:/Unity Project/Shader-Programming-Test/Assets/../Packages/com.unity.render-pipelines.universal@14.0.12/
+  srp_URP_COMMON_ModifySourcesPath: C:/Unity Project/Shader-Programming-Test/Assets\Magic
+    Lightmap Switcher/Editor/Dependent Resources/Shader Sources/SRP/URP 14/Common/
   srp_URP_Shaders_ModifySourcesPath: 
   URP__SHADOWS__DEFAULT_SOURCE_FILE: Shadows.hlsl
   URP__LIT__DEFAULT_SOURCE_FILE: Shaders/Lit.shader

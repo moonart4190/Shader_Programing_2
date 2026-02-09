@@ -1,0 +1,259 @@
+Min Shader Target - 4.5
+
+URP 14 Patch MAP:
+	1) com.unity.render-pipelines.universal@version/Shaders/Lit.shader (SimpleLit.shader)
+		Line 3: //<MLS_PREPARED>
+		Pass: "ForwardLit"/"GBuffer"/"Universal2D"
+			//--------------------------------------
+            // MLS defined keywords
+            #pragma multi_compile MLS_LIGHTMAPS_BLENDING_ON MLS_LIGHTMAPS_BLENDING_OFF
+            #pragma multi_compile MLS_REFLECTIONS_BLENDING_ON MLS_REFLECTIONS_BLENDING_OFF
+            #pragma multi_compile MLS_TEXTURE_ARRAYS_ON MLS_TEXTURE_ARRAYS_OFF
+	
+	2) com.unity.render-pipelines.universal@version/Shaders/LitForwardPass.hlsl (SimpleLitForwardPass.hlsl)
+		Line 4: //<MLS_PREPARED>
+		Attributes/Varyings:
+			#if defined (MLS_TEXTURE_ARRAYS_ON)
+    			    float4 mls_AdditionalObjectData : COLOR;
+			#endif
+		InitializeInputData():
+			#if defined (LIGHTMAP_ON)
+    			    #if defined (MLS_TEXTURE_ARRAYS_ON)
+        		        inputData.bakedGI = MLS_SAMPLE_GI(input.staticLightmapUV, input.vertexSH, inputData.normalWS, input.mls_AdditionalObjectData);
+    			    #else
+        			inputData.bakedGI = SAMPLE_GI(input.staticLightmapUV, input.vertexSH, inputData.normalWS);
+    			    #endif
+			#else        
+    			    inputData.bakedGI = SAMPLE_GI(0, input.vertexSH, inputData.normalWS);
+			#endif
+
+			#if defined (MLS_TEXTURE_ARRAYS_ON)
+			    inputData.mls_AdditionalObjectData = input.mls_AdditionalObjectData;
+			#endif
+		LitPassVertex(): 
+			#if defined (MLS_TEXTURE_ARRAYS_ON)
+    			    output.mls_AdditionalObjectData = input.mls_AdditionalObjectData;
+			#endif
+	3) com.unity.render-pipelines.universal@version/Shaders/LitGBufferPass.hlsl
+		Line 4:
+		Attributes/Varyings:
+		InitializeInputData():
+		LitGBufferPassVertex(): As for LitForwardPass/SimpleLitForwardPass
+		LitGBufferPassFragment():
+			#if defined (MLS_TEXTURE_ARRAYS_ON)
+    			    half3 color = GlobalIllumination(brdfData, inputData.bakedGI, surfaceData.occlusion, inputData.positionWS, inputData.normalWS, inputData.viewDirectionWS, inputData.mls_AdditionalObjectData);
+			#else
+    			    half3 color = GlobalIllumination(brdfData, inputData.bakedGI, surfaceData.occlusion, inputData.positionWS, inputData.normalWS, inputData.viewDirectionWS);
+			#endif
+	4) com.unity.render-pipelines.universal@version/Shaders/SimpleLitGBufferPass.hlsl
+		Line 4:
+		Attributes/Varyings:
+		InitializeInputData(): As for LitForwardPass/SimpleLitForwardPass
+	5) com.unity.render-pipelines.universal@version/ShaderLibrary/GlobalIllumination.hlsl
+		Line 5: //<MLS_PREPARED>
+		LIGHTMAP_MACROS:
+			#if defined(UNITY_DOTS_INSTANCING_ENABLED)
+				#define LIGHTMAP_NAME unity_Lightmaps
+				#define LIGHTMAP_INDIRECTION_NAME unity_LightmapsInd
+				#define LIGHTMAP_SAMPLER_NAME samplerunity_Lightmaps
+    
+				#if defined (MLS_TEXTURE_ARRAYS_ON) && defined (MLS_LIGHTMAPS_BLENDING_ON)
+					#define LIGHTMAP_SAMPLE_EXTRA_ARGS staticLightmapUV, mls_AdditionalObjectData
+				#else
+					#define LIGHTMAP_SAMPLE_EXTRA_ARGS staticLightmapUV, unity_LightmapIndex.x
+				#endif
+			#else
+				#define LIGHTMAP_NAME unity_Lightmap
+				#define LIGHTMAP_INDIRECTION_NAME unity_LightmapInd
+				#define LIGHTMAP_SAMPLER_NAME samplerunity_Lightmap
+    
+				#if defined (MLS_TEXTURE_ARRAYS_ON) && defined (MLS_LIGHTMAPS_BLENDING_ON)
+					#define LIGHTMAP_SAMPLE_EXTRA_ARGS staticLightmapUV, mls_AdditionalObjectData
+				#else
+					#define LIGHTMAP_SAMPLE_EXTRA_ARGS staticLightmapUV
+				#endif 
+			#endif
+		ADDITIONAL_MLS_MACROS:
+			#if defined (MLS_TEXTURE_ARRAYS_ON) && defined (MLS_LIGHTMAPS_BLENDING_ON)
+				#define MLS_SAMPLE_LIGHTMAP_ARGS float2 staticLightmapUV, float2 dynamicLightmapUV, half3 normalWS, float4 mls_AdditionalObjectData
+				#define MLS_SAMPLE_LIGHTMAP_ARGS_LEGACY float2 staticLightmapUV, half3 normalWS, float4 mls_AdditionalObjectData
+				#define MLS_CALCULATE_IRRADIANCE_ARGS half3 reflectVector, float3 positionWS, half perceptualRoughness, float2 normalizedScreenSpaceUV, float4 mls_AdditionalObjectData
+				#define MLS_CALCULATE_IRRADIANCE_ARGS_USE reflectVector, positionWS, perceptualRoughness, normalizedScreenSpaceUV, mls_AdditionalObjectData
+				#define MLS_CALCULATE_IRRADIANCE_ARGS_LEGACY half3 reflectVector, float3 positionWS, half perceptualRoughness, float4 mls_AdditionalObjectData
+				#define MLS_CALCULATE_IRRADIANCE_ARGS_LEGACY_USE reflectVector, positionWS, perceptualRoughness, float2(0.0, 0.0), mls_AdditionalObjectData
+				#define MLS_GLOSSY_ENVIRONMENT_ARGS_V1 half3 reflectVector, float3 positionWS, half perceptualRoughness, half occlusion, float2 normalizedScreenSpaceUV, float4 mls_AdditionalObjectData
+				#define MLS_GLOSSY_ENVIRONMENT_ARGS_V1_USE reflectVector, positionWS, perceptualRoughness, occlusion, normalizedScreenSpaceUV, mls_AdditionalObjectData
+				#define MLS_GLOSSY_ENVIRONMENT_ARGS_V2 half3 reflectVector, float3 positionWS, half perceptualRoughness, half occlusion, float4 mls_AdditionalObjectData
+				#define MLS_GLOSSY_ENVIRONMENT_ARGS_V2_USE reflectVector, positionWS, perceptualRoughness, occlusion, float2(0.0f, 0.0f), mls_AdditionalObjectData
+				#define MLS_GLOSSY_ENVIRONMENT_ARGS_V3 half3 reflectVector, half perceptualRoughness, half occlusion, float4 mls_AdditionalObjectData
+				#define MLS_GLOBAL_ILLUMINATION_ARGS_V1 BRDFData brdfData, BRDFData brdfDataClearCoat, float clearCoatMask, \
+														half3 bakedGI, half occlusion, float3 positionWS, half3 normalWS, half3 viewDirectionWS, float2 normalizedScreenSpaceUV, float4 mls_AdditionalObjectData
+				#define MLS_GLOBAL_ILLUMINATION_ARGS_V2 BRDFData brdfData, BRDFData brdfDataClearCoat, float clearCoatMask, \
+														half3 bakedGI, half occlusion, float3 positionWS, half3 normalWS, half3 viewDirectionWS, float4 mls_AdditionalObjectData
+				#define MLS_GLOBAL_ILLUMINATION_ARGS_V3 BRDFData brdfData, half3 bakedGI, half occlusion, float3 positionWS, \
+														half3 normalWS, half3 viewDirectionWS, float4 mls_AdditionalObjectData
+				#define MLS_GLOBAL_ILLUMINATION_ARGS_V4 BRDFData brdfData, BRDFData brdfDataClearCoat, float clearCoatMask, \
+														half3 bakedGI, half occlusion, half3 normalWS, half3 viewDirectionWS, float4 mls_AdditionalObjectData
+				#define MLS_GLOBAL_ILLUMINATION_ARGS_V5 BRDFData brdfData, half3 bakedGI, half occlusion, half3 normalWS, half3 viewDirectionWS, float4 mls_AdditionalObjectData
+			#else
+				#define MLS_SAMPLE_LIGHTMAP_ARGS float2 staticLightmapUV, float2 dynamicLightmapUV, half3 normalWS
+				#define MLS_SAMPLE_LIGHTMAP_ARGS_LEGACY float2 staticLightmapUV, half3 normalWS
+				#define MLS_CALCULATE_IRRADIANCE_ARGS half3 reflectVector, float3 positionWS, half perceptualRoughness, float2 normalizedScreenSpaceUV
+				#define MLS_CALCULATE_IRRADIANCE_ARGS_USE reflectVector, positionWS, perceptualRoughness, normalizedScreenSpaceUV
+				#define MLS_CALCULATE_IRRADIANCE_ARGS_LEGACY half3 reflectVector, float3 positionWS, half perceptualRoughness
+				#define MLS_CALCULATE_IRRADIANCE_ARGS_LEGACY_USE reflectVector, positionWS, perceptualRoughness, float2(0.0, 0.0)
+				#define MLS_GLOSSY_ENVIRONMENT_ARGS_V1 half3 reflectVector, float3 positionWS, half perceptualRoughness, half occlusion, float2 normalizedScreenSpaceUV
+				#define MLS_GLOSSY_ENVIRONMENT_ARGS_V1_USE reflectVector, positionWS, perceptualRoughness, occlusion, normalizedScreenSpaceUV
+				#define MLS_GLOSSY_ENVIRONMENT_ARGS_V2 half3 reflectVector, float3 positionWS, half perceptualRoughness, half occlusion
+				#define MLS_GLOSSY_ENVIRONMENT_ARGS_V2_USE reflectVector, positionWS, perceptualRoughness, occlusion, float2(0.0f, 0.0f)
+				#define MLS_GLOSSY_ENVIRONMENT_ARGS_V3 half3 reflectVector, half perceptualRoughness, half occlusion
+				#define MLS_GLOBAL_ILLUMINATION_ARGS_V1 BRDFData brdfData, BRDFData brdfDataClearCoat, float clearCoatMask, \
+														half3 bakedGI, half occlusion, float3 positionWS, half3 normalWS, half3 viewDirectionWS, float2 normalizedScreenSpaceUV
+				#define MLS_GLOBAL_ILLUMINATION_ARGS_V2 BRDFData brdfData, BRDFData brdfDataClearCoat, float clearCoatMask, \
+														half3 bakedGI, half occlusion, float3 positionWS, half3 normalWS, half3 viewDirectionWS
+				#define MLS_GLOBAL_ILLUMINATION_ARGS_V3 BRDFData brdfData, half3 bakedGI, half occlusion, float3 positionWS, \
+														half3 normalWS, half3 viewDirectionWS
+				#define MLS_GLOBAL_ILLUMINATION_ARGS_V4 BRDFData brdfData, BRDFData brdfDataClearCoat, float clearCoatMask, \
+														half3 bakedGI, half occlusion, half3 normalWS, half3 viewDirectionWS
+				#define MLS_GLOBAL_ILLUMINATION_ARGS_V5 BRDFData brdfData, half3 bakedGI, half occlusion, half3 normalWS, half3 viewDirectionWS
+			#endif
+		SAMPLE_GI_MACROS:
+			#if defined(LIGHTMAP_ON) && defined(DYNAMICLIGHTMAP_ON) 
+				#if defined (MLS_TEXTURE_ARRAYS_ON)
+					#define SAMPLE_GI(staticLmName, dynamicLmName, shName, normalWSName) SampleLightmap(staticLmName, dynamicLmName, normalWSName)
+					#define MLS_SAMPLE_GI(staticLmName, dynamicLmName, normalWSName, mls_AdditionalObjectData) SampleLightmap(staticLmName, dynamicLmName, normalWSName, mls_AdditionalObjectData)
+				#else
+					#define SAMPLE_GI(staticLmName, dynamicLmName, shName, normalWSName) SampleLightmap(staticLmName, dynamicLmName, normalWSName)
+				#endif
+			#elif defined(DYNAMICLIGHTMAP_ON)
+				#define SAMPLE_GI(staticLmName, dynamicLmName, shName, normalWSName) SampleLightmap(0, dynamicLmName, normalWSName)
+			#elif defined(LIGHTMAP_ON)
+				#if defined (MLS_TEXTURE_ARRAYS_ON)
+					#define SAMPLE_GI(staticLmName, shName, normalWSName) SampleLightmap(staticLmName, 0, normalWSName)
+					#define MLS_SAMPLE_GI(staticLmName, shName, normalWSName, mls_AdditionalObjectData) SampleLightmap(staticLmName, 0, normalWSName, mls_AdditionalObjectData)
+				#else
+					#define SAMPLE_GI(staticLmName, shName, normalWSName) SampleLightmap(staticLmName, 0, normalWSName)
+				#endif
+			#else
+				#define SAMPLE_GI(staticLmName, shName, normalWSName) SampleSHPixel(shName, normalWSName)
+			#endif
+		half3 SampleLightmap(MLS_SAMPLE_LIGHTMAP_ARGS)			
+		half3 SampleLightmap(MLS_SAMPLE_LIGHTMAP_ARGS_LEGACY):
+			#if defined (MLS_TEXTURE_ARRAYS_ON) && defined (MLS_LIGHTMAPS_BLENDING_ON)
+				half3 result = SampleLightmap(staticLightmapUV, dummyDynamicLightmapUV, normalWS, mls_AdditionalObjectData);
+			#else
+				half3 result = SampleLightmap(staticLightmapUV, dummyDynamicLightmapUV, normalWS);
+			#endif
+		half3 CalculateIrradianceFromReflectionProbes(MLS_CALCULATE_IRRADIANCE_ARGS)
+	6) com.unity.render-pipelines.core@version/ShaderLibrary/EntityLighting.hlsl
+		Line 8: //<MLS_PREPARED>
+		LIGHTMAP_MACROS:
+			#if defined(UNITY_DOTS_INSTANCING_ENABLED)
+				#define TEXTURE2D_LIGHTMAP_PARAM TEXTURE2D_ARRAY_PARAM
+				#define TEXTURE2D_LIGHTMAP_ARGS TEXTURE2D_ARRAY_ARGS
+    
+				#if defined(MLS_LIGHTMAPS_BLENDING_ON)
+					#if defined(MLS_TEXTURE_ARRAYS_ON)
+						#define LIGHTMAP_EXTRA_ARGS float2 uv, float4 mls_AdditionalObjectData
+						#define LIGHTMAP_EXTRA_ARGS_USE uv, mls_AdditionalObjectData
+					#else
+						#define LIGHTMAP_EXTRA_ARGS float2 uv
+						#define LIGHTMAP_EXTRA_ARGS_USE uv
+					#endif
+				#else
+					#define SAMPLE_TEXTURE2D_LIGHTMAP SAMPLE_TEXTURE2D_ARRAY
+					#define LIGHTMAP_EXTRA_ARGS float2 uv, float slice
+					#define LIGHTMAP_EXTRA_ARGS_USE uv, slice
+				#endif
+			#else
+				#define TEXTURE2D_LIGHTMAP_PARAM TEXTURE2D_PARAM
+				#define TEXTURE2D_LIGHTMAP_ARGS TEXTURE2D_ARGS
+    
+				#if defined(MLS_LIGHTMAPS_BLENDING_ON) 
+					#if defined(MLS_TEXTURE_ARRAYS_ON)
+						#define LIGHTMAP_EXTRA_ARGS float2 uv, float4 mls_AdditionalObjectData
+						#define LIGHTMAP_EXTRA_ARGS_USE uv, mls_AdditionalObjectData
+					#else
+						#define LIGHTMAP_EXTRA_ARGS float2 uv
+						#define LIGHTMAP_EXTRA_ARGS_USE uv
+					#endif
+				#else         
+					#define LIGHTMAP_EXTRA_ARGS float2 uv
+					#define LIGHTMAP_EXTRA_ARGS_USE uv
+					#define SAMPLE_TEXTURE2D_LIGHTMAP SAMPLE_TEXTURE2D
+				#endif    
+			#endif
+		real3 SampleSingleLightmap():
+			if (encodedLightmap)
+			{        
+				#if defined(MLS_LIGHTMAPS_BLENDING_ON) 
+					real4 encodedIlluminance = BlendTwoTextures(0, LIGHTMAP_EXTRA_ARGS_USE).rgba;
+				#else
+					real4 encodedIlluminance = SAMPLE_TEXTURE2D_LIGHTMAP(lightmapTex, lightmapSampler, LIGHTMAP_EXTRA_ARGS_USE).rgba;
+				#endif
+
+				illuminance = DecodeLightmap(encodedIlluminance, decodeInstructions);
+			}
+			else
+			{        
+				#if defined(MLS_LIGHTMAPS_BLENDING_ON)
+					illuminance = BlendTwoTextures(0, LIGHTMAP_EXTRA_ARGS_USE).rgb;
+				#else
+					illuminance = SAMPLE_TEXTURE2D_LIGHTMAP(lightmapTex, lightmapSampler, LIGHTMAP_EXTRA_ARGS_USE).rgb;
+				#endif
+			}
+		void SampleDirectionalLightmap():
+			#if defined(MLS_LIGHTMAPS_BLENDING_ON) 
+				real4 direction = BlendTwoTextures(1, LIGHTMAP_EXTRA_ARGS_USE);
+			#else
+				real4 direction = SAMPLE_TEXTURE2D_LIGHTMAP(lightmapTex, lightmapSampler, LIGHTMAP_EXTRA_ARGS_USE);
+			#endif
+			
+			if (encodedLightmap)
+			{            
+				#if defined(MLS_LIGHTMAPS_BLENDING_ON) 
+					real4 encodedIlluminance = BlendTwoTextures(0, LIGHTMAP_EXTRA_ARGS_USE);
+				#else
+					real4 encodedIlluminance = SAMPLE_TEXTURE2D_LIGHTMAP(lightmapTex, lightmapSampler, LIGHTMAP_EXTRA_ARGS_USE);
+				#endif       
+        
+				illuminance = DecodeLightmap(encodedIlluminance, decodeInstructions);
+			}
+			else
+			{           
+				#if defined(MLS_LIGHTMAPS_BLENDING_ON) 
+					illuminance = BlendTwoTextures(0, LIGHTMAP_EXTRA_ARGS_USE);
+				#else
+					illuminance = SAMPLE_TEXTURE2D_LIGHTMAP(lightmapTex, lightmapSampler, LIGHTMAP_EXTRA_ARGS_USE);
+				#endif       
+			} 
+	7) com.unity.render-pipelines.universal@version/ShaderLibrary/Lighting.hlsl
+		Line 4: //<MLS_PREPARED>
+		half4 UniversalFragmentPBR():
+			#if defined (MLS_TEXTURE_ARRAYS_ON)
+				lightingData.giColor = GlobalIllumination(brdfData, brdfDataClearCoat, surfaceData.clearCoatMask,
+                                              inputData.bakedGI, aoFactor.indirectAmbientOcclusion, inputData.positionWS,
+                                              inputData.normalWS, inputData.viewDirectionWS, inputData.normalizedScreenSpaceUV, inputData.mls_AdditionalObjectData);
+			#else
+				lightingData.giColor = GlobalIllumination(brdfData, brdfDataClearCoat, surfaceData.clearCoatMask,
+													  inputData.bakedGI, aoFactor.indirectAmbientOcclusion, inputData.positionWS,
+													  inputData.normalWS, inputData.viewDirectionWS, inputData.normalizedScreenSpaceUV);
+			#endif
+	8) com.unity.render-pipelines.universal@version/ShaderLibrary/Debug/Debugging3D.hlsl
+		Line 5: //<MLS_PREPARED>
+		bool CanDebugOverrideOutputColor():
+			#if defined(DYNAMICLIGHTMAP_ON)
+                    inputData.bakedGI = SAMPLE_GI(inputData.staticLightmapUV, inputData.dynamicLightmapUV.xy, inputData.vertexSH, inputData.normalWS);
+                #else
+                    #if defined (LIGHTMAP_ON)
+                        #if defined (MLS_TEXTURE_ARRAYS_ON)
+                            inputData.bakedGI = MLS_SAMPLE_GI(inputData.staticLightmapUV, inputData.vertexSH, inputData.normalWS, inputData.mls_AdditionalObjectData);
+                        #else
+                            inputData.bakedGI = SAMPLE_GI(inputData.staticLightmapUV, inputData.vertexSH, inputData.normalWS);
+                        #endif
+                    #else        
+                        inputData.bakedGI = SAMPLE_GI(0, inputData.vertexSH, inputData.normalWS);
+                    #endif
+                #endif
+	9) com.unity.render-pipelines.core@version/ShaderLibrary/Common.hlsl
+		Before #endif // UNITY_COMMON_INCLUDED

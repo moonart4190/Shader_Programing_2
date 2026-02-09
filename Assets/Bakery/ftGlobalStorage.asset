@@ -404,13 +404,13 @@ MonoBehaviour:
   - Assets/Magic Lightmap Switcher/Examples/Materials/Material Samples/UnityBall.fbx
   uvOverlapAssetList: 00000000ffffffff0000000000000000
   xatlasWarningShown: 0
-  foundCompatibleSetup: 0
-  gpuName_2: 
-  runsNonRTX: 1
-  runsRTX6: 1
+  foundCompatibleSetup: 1
+  gpuName_2: NVIDIA GeForce RTX 5070 Ti
+  runsNonRTX: 0
+  runsRTX6: 0
   runsRTX9: 1
-  runsOptix5: 1
-  runsOptix6: 1
+  runsOptix5: 0
+  runsOptix6: 0
   runsOptix7: 1
   runsOIDN: 1
   runsOIDN2: 1
@@ -482,13 +482,13 @@ MonoBehaviour:
   renderSettingsBruteForce: 1
   renderSettingsAlphaDithering: 0
   renderSettingsBeepOnFinish: 0
-  renderSettingsExportTerrainAsHeightmap: 1
-  renderSettingsRTXMode: 0
+  renderSettingsExportTerrainAsHeightmap: 0
+  renderSettingsRTXMode: 1
   renderSettingsLightProbeMode: 1
   renderSettingsClientMode: 0
   renderSettingsServerAddress: 127.0.0.1
   renderSettingsUnwrapper: 0
-  renderSettingsDenoiserType: 100
+  renderSettingsDenoiserType: 101
   renderSettingsExportTerrainTrees: 0
   renderSettingsShowPerf: 1
   renderSettingsSampleDiv: 1
